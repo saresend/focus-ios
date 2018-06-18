@@ -83,23 +83,19 @@ class WebViewController: UIViewController, WebController {
     func load(_ request: URLRequest) {
         
         if AppInfo.hasConnectivity() {
+            print("app has connectivity")
             errorView.removeFromSuperview()
             browserView.load(request)
             return
         }
         
+        print("no connectivity while loading :(")
+        
         reset()
         setupErrorView()
-        stop()
-        
-      //  let nav = WKNavigation()
-     //   webView(browserView, didFail: WKNavigation, withError: <#T##Error#>)
-        // func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-
-        
         
         let label = UILabel()
-        let text = "The Internet connection appears to be offline."
+        let text = UIConstants.strings.errorNoInternet
         let attrString = NSMutableAttributedString(string: text)
         let style = NSMutableParagraphStyle()
         
@@ -113,36 +109,39 @@ class WebViewController: UIViewController, WebController {
         errorView.addSubview(label)
 
         let button = UIButton()
-        button.setTitle("Try Again", for: .normal)
-        //button.backgroundColor = UIConstants.colors.focusLightBlue
+        button.setTitle(UIConstants.strings.errorTryAgainButton, for: .normal)
         button.backgroundColor = UIConstants.colors.settingsLink
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         button.layer.cornerRadius = 12
         button.clipsToBounds = true
         
+        button.addTarget(self, action: #selector(reload), for: .touchUpInside)
+        
         errorView.addSubview(button)
         
+        let errorStack = UIStackView(arrangedSubviews: [label, button])
+        errorStack.axis = .vertical
+        errorStack.spacing = 40
+        
+        errorView.addSubview(errorStack)
         guard let superview = view.superview else { return }
         
-        label.snp.makeConstraints { make in
+        button.snp.makeConstraints { make in
+            make.height.equalTo(48)
+        }
+
+        errorStack.snp.makeConstraints { make in
             make.leading.equalTo(superview).offset(40)
             make.trailing.equalTo(superview).offset(-40)
-            make.centerY.equalTo(view.snp.centerY).offset(-80)
-        }
-        
-        button.snp.makeConstraints { make in
-            make.top.equalTo(label.snp.bottom).offset(40)
-            make.centerX.equalTo(label.snp.centerX)
-            make.width.equalTo(label.snp.width)
-            make.height.equalTo(48)
+            make.centerY.equalTo(view.snp.centerY)
         }
         
         view.layoutIfNeeded()
     }
     func goBack() { browserView.goBack() }
     func goForward() { browserView.goForward() }
-    func reload() { browserView.reload() }
+    @objc func reload() { print("reloading"); browserView.reload() }
     
     @available(iOS 9, *)
     func requestDesktop() {

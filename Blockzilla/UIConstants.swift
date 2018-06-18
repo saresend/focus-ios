@@ -170,6 +170,8 @@ struct UIConstants {
         static let labelNoMobileDataConnection = NSLocalizedString("Label.NoMobileDataConnection", value: "Mobile Data is Turned Off", comment: "Label for alert title when mobile data is disabled")
         static let labelNoMobileDataConnectionDescription = NSLocalizedString("Label.NoMobileDataConnectionDescription", value: "Turn on mobile data or use Wi-Fi to access data.", comment: "Label for alert description when mobile data is disabled")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
+        static let errorNoInternet = NSLocalizedString("Error.noInternet", value: "The Internet connection appears to be offline.", comment: "Label displayed when no internet is available and a page cannnot load")
+        static let errorTryAgainButton = NSLocalizedString("Error.tryAgain", value: "Try Again", comment: "Try again button that refreshes the page after a failed load")
         static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar)")
         static let labelOK = NSLocalizedString("Label.OK", value: "OK", comment: "OK label presented in various locations")
         static let openCancel = NSLocalizedString("Open.Cancel", value: "Cancel", comment: "Label in share alert to cancel the alert")
