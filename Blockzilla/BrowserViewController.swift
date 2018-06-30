@@ -269,7 +269,8 @@ class BrowserViewController: UIViewController {
                             self.showToolbars()
                         } else {
                             // Clear the browser session, as the user failed to authenticate
-                            self.resetBrowser()
+                            self.resetBrowser(shouldAnimate: false)
+                            //self.resetBrowser()
                         }
                         AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                     }
@@ -435,7 +436,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func resetBrowser() {
+    fileprivate func resetBrowser(shouldAnimate: Bool = true) {
         // Screenshot the browser, showing the screenshot on top.
         let image = mainContainerView.screenshot()
         let screenshotView = UIImageView(image: image)
@@ -458,17 +459,19 @@ class BrowserViewController: UIViewController {
         WebCacheUtils.reset()
         
         requestReviewIfNecessary()
+        
+        let animationSpeed = shouldAnimate ? UIConstants.layout.deleteAnimationDuration : 0.0
 
         // Zoom out on the screenshot, then slide down, then remove it.
         mainContainerView.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: animationSpeed, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.center.equalTo(self.mainContainerView)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
             }
             self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
-            UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
+            UIView.animate(withDuration: animationSpeed, animations: {
                 screenshotView.snp.remakeConstraints { make in
                     make.centerX.equalTo(self.mainContainerView)
                     make.top.equalTo(self.mainContainerView.snp.bottom)
